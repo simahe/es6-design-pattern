@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>es6 语法学习 - 解释器模式</title>
+  </head>
+  <body>
+    <script>
+      // 抽象表达式接口
+      class Expression {
+        interpret(context) {
+          throw new Error('This method should be overridden.');
+        }
+      }
+
+      // 终结符表达式类 - 表示数字
+      class NumberExpression extends Expression {
+        constructor(number) {
+          super();
+          this.number = number;
+        }
+
+        interpret(context) {
+          return this.number;
+        }
+      }
+
+      // 非终结符表达式类 - 表示加法
+      class AddExpression extends Expression {
+        constructor(leftExpression, rightExpression) {
+          super();
+          this.leftExpression = leftExpression;
+          this.rightExpression = rightExpression;
+        }
+
+        interpret(context) {
+          return (
+            this.leftExpression.interpret(context) +
+            this.rightExpression.interpret(context)
+          );
+        }
+      }
+
+      // 客户端代码
+      const expression = new AddExpression(
+        new NumberExpression(5),
+        new AddExpression(new NumberExpression(3), new NumberExpression(2))
+      );
+
+      const context = {}; // 在这个简单例子中，我们不需要上下文信息
+      const result = expression.interpret(context);
+      console.log('计算结果:', result); // 输出: 计算结果: 10
+    </script>
+  </body>
+</html>

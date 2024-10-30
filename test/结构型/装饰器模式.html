@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>es6 语法学习 - 装饰器模式</title>
+  </head>
+  <body>
+    <script>
+      // 基础类
+      class Coffee {
+        cost() {
+          return 5; // 基础咖啡的价格
+        }
+
+        getDescription() {
+          return '普通咖啡';
+        }
+      }
+
+      // 装饰器类 - 奶泡
+      class MilkDecorator {
+        constructor(coffee) {
+          this.coffee = coffee; // 被装饰的咖啡
+        }
+
+        cost() {
+          return this.coffee.cost() + 1; // 奶泡的额外价格
+        }
+
+        getDescription() {
+          return this.coffee.getDescription() + ', 加奶泡';
+        }
+      }
+
+      // 装饰器类 - 香草
+      class VanillaDecorator {
+        constructor(coffee) {
+          this.coffee = coffee; // 被装饰的咖啡
+        }
+
+        cost() {
+          return this.coffee.cost() + 0.5; // 香草的额外价格
+        }
+
+        getDescription() {
+          return this.coffee.getDescription() + ', 加香草';
+        }
+      }
+
+      // 客户端代码
+      let myCoffee = new Coffee();
+      console.log(
+        `描述: ${myCoffee.getDescription()} | 价格: $${myCoffee.cost()}`
+      );
+
+      // 添加奶泡
+      myCoffee = new MilkDecorator(myCoffee);
+      console.log(
+        `描述: ${myCoffee.getDescription()} | 价格: $${myCoffee.cost()}`
+      );
+
+      // 添加香草
+      myCoffee = new VanillaDecorator(myCoffee);
+      console.log(
+        `描述: ${myCoffee.getDescription()} | 价格: $${myCoffee.cost()}`
+      );
+    </script>
+  </body>
+</html>

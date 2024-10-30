@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>es6 语法学习 - 外观模式</title>
+  </head>
+  <body>
+    <script>
+      // 子系统 - DVD 播放器
+      class DVDPlayer {
+        on() {
+          console.log('DVD 播放器开机');
+        }
+
+        play(movie) {
+          console.log(`播放电影: ${movie}`);
+        }
+
+        off() {
+          console.log('DVD 播放器关机');
+        }
+      }
+
+      // 子系统 - 音响
+      class SoundSystem {
+        on() {
+          console.log('音响开机');
+        }
+
+        setVolume(volume) {
+          console.log(`音量设置为: ${volume}`);
+        }
+
+        off() {
+          console.log('音响关机');
+        }
+      }
+
+      // 子系统 - 投影仪
+      class Projector {
+        on() {
+          console.log('投影仪开机');
+        }
+
+        setInput(input) {
+          console.log(`设置投影仪输入为: ${input}`);
+        }
+
+        off() {
+          console.log('投影仪关机');
+        }
+      }
+
+      // 外观类
+      class HomeTheaterFacade {
+        constructor(dvdPlayer, soundSystem, projector) {
+          this.dvdPlayer = dvdPlayer;
+          this.soundSystem = soundSystem;
+          this.projector = projector;
+        }
+
+        watchMovie(movie) {
+          console.log('准备观看电影...');
+          this.projector.on();
+          this.projector.setInput('DVD');
+          this.soundSystem.on();
+          this.soundSystem.setVolume(5);
+          this.dvdPlayer.on();
+          this.dvdPlayer.play(movie);
+        }
+
+        endMovie() {
+          console.log('结束观看电影...');
+          this.dvdPlayer.off();
+          this.soundSystem.off();
+          this.projector.off();
+        }
+      }
+
+      // 使用示例
+      const dvdPlayer = new DVDPlayer();
+      const soundSystem = new SoundSystem();
+      const projector = new Projector();
+
+      const homeTheater = new HomeTheaterFacade(
+        dvdPlayer,
+        soundSystem,
+        projector
+      );
+
+      // 通过外观类观看电影
+      homeTheater.watchMovie('复仇者联盟');
+      homeTheater.endMovie();
+    </script>
+  </body>
+</html>

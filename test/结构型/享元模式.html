@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>es6 语法学习 - 享元模式</title>
+  </head>
+  <body>
+    <script>
+      // 享元类 - 字符
+      class Character {
+        constructor(font, size, color) {
+          this.font = font; // 字体
+          this.size = size; // 字体大小
+          this.color = color; // 字体颜色
+        }
+
+        render(text) {
+          console.log(
+            `渲染字符: "${text}"，字体: ${this.font}，大小: ${this.size}，颜色: ${this.color}`
+          );
+        }
+      }
+      // 享元工厂
+      class CharacterFactory {
+        constructor() {
+          this.characters = {}; // 用于存储享元对象
+        }
+
+        getCharacter(font, size, color) {
+          const key = `${font}-${size}-${color}`;
+          if (!this.characters[key]) {
+            this.characters[key] = new Character(font, size, color);
+            console.log(`创建新的字符对象: ${key}`);
+          } else {
+            console.log(`使用已有字符对象: ${key}`);
+          }
+          return this.characters[key];
+        }
+      }
+
+      // 客户端代码
+      const factory = new CharacterFactory();
+
+      // 创建并渲染字符
+      const c1 = factory.getCharacter('Arial', 12, 'red');
+      c1.render('A');
+
+      const c2 = factory.getCharacter('Arial', 12, 'blue');
+      c2.render('B');
+
+      const c3 = factory.getCharacter('Arial', 12, 'red');
+      c3.render('C');
+
+      // 验证是否共享对象
+      console.log(c1 === c3); // 输出: true
+    </script>
+  </body>
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>es6 语法学习 - 建造者模式</title>
+  </head>
+  <body>
+    <script>
+      // UserInfo.js
+      class UserInfo {
+        constructor(name, address, contact) {
+          this.name = name;
+          this.address = address;
+          this.contact = contact;
+        }
+
+        // 可以添加一个方法来展示用户信息
+        showInfo() {
+          console.log(`Name: ${this.name}`);
+          console.log(
+            `Address: ${this.address.street}, ${this.address.city}, ${this.address.country}`
+          );
+          console.log(`Contact: ${this.contact.email}, ${this.contact.phone}`);
+        }
+      }
+      // UserInfoBuilder.js
+      class UserInfoBuilder {
+        constructor() {
+          this.userInfo = new UserInfo(
+            '',
+            { street: '', city: '', country: '' },
+            { email: '', phone: '' }
+          );
+        }
+
+        setName(name) {
+          this.userInfo.name = name;
+          return this; // 返回当前Builder实例，以便链式调用
+        }
+
+        setAddress(street, city, country) {
+          this.userInfo.address = { street, city, country };
+          return this;
+        }
+
+        setContact(email, phone) {
+          this.userInfo.contact = { email, phone };
+          return this;
+        }
+
+        build() {
+          // 返回最终构建的UserInfo对象
+          return this.userInfo;
+        }
+      }
+
+      // client.js
+
+      const builder = new UserInfoBuilder();
+      const userInfo = builder
+        .setName('John Doe')
+        .setAddress('123 Main St', 'Springfield', 'USA')
+        .setContact('john.doe@example.com', '123-456-7890')
+        .build();
+
+      userInfo.showInfo();
+    </script>
+  </body>
+</html>

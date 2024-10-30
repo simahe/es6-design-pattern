@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>es6 语法学习 - 抽象工厂模式</title>
+  </head>
+  <body>
+    <script>
+      // 抽象产品：灯
+      class Light {
+        constructor() {
+          if (new.target === Light) {
+            throw new Error('Cannot instantiate abstract class!');
+          }
+        }
+
+        turnOn() {
+          throw new Error('Method turnOn() must be implemented.');
+        }
+
+        turnOff() {
+          throw new Error('Method turnOff() must be implemented.');
+        }
+      }
+
+      // 抽象产品：按钮
+      class Button {
+        constructor() {
+          if (new.target === Button) {
+            throw new Error('Cannot instantiate abstract class!');
+          }
+        }
+
+        press() {
+          throw new Error('Method press() must be implemented.');
+        }
+      }
+      //接下来，我们为每种产品系列创建具体的实现：
+      // 具体产品：LED灯
+      class LEDLight extends Light {
+        turnOn() {
+          console.log('LED Light is on');
+        }
+
+        turnOff() {
+          console.log('LED Light is off');
+        }
+      }
+
+      // 具体产品：白炽灯
+      class IncandescentLight extends Light {
+        turnOn() {
+          console.log('Incandescent Light is on');
+        }
+
+        turnOff() {
+          console.log('Incandescent Light is off');
+        }
+      }
+
+      // 具体产品：塑料按钮
+      class PlasticButton extends Button {
+        press() {
+          console.log('Plastic Button is pressed');
+        }
+      }
+
+      // 具体产品：金属按钮
+      class MetalButton extends Button {
+        press() {
+          console.log('Metal Button is pressed');
+        }
+      }
+
+      // 抽象工厂
+      class UIFactory {
+        constructor() {
+          if (new.target === UIFactory) {
+            throw new Error('Cannot instantiate abstract class!');
+          }
+        }
+
+        createLight() {
+          throw new Error('Method createLight() must be implemented.');
+        }
+
+        createButton() {
+          throw new Error('Method createButton() must be implemented.');
+        }
+      }
+
+      // 具体工厂：用于创建LED灯和塑料按钮
+      class PlasticAndLEDFactory extends UIFactory {
+        createLight() {
+          return new LEDLight();
+        }
+
+        createButton() {
+          return new PlasticButton();
+        }
+      }
+
+      // 具体工厂：用于创建白炽灯和金属按钮
+      class MetalAndIncandescentFactory extends UIFactory {
+        createLight() {
+          return new IncandescentLight();
+        }
+
+        createButton() {
+          return new MetalButton();
+        }
+      }
+
+      // 使用PlasticAndLEDFactory创建产品
+      const ledFactory = new PlasticAndLEDFactory();
+      const ledLight = ledFactory.createLight();
+      const plasticButton = ledFactory.createButton();
+
+      ledLight.turnOn(); // 输出: LED Light is on
+      plasticButton.press(); // 输出: Plastic Button is pressed
+
+      // 使用MetalAndIncandescentFactory创建产品
+      const incandescentFactory = new MetalAndIncandescentFactory();
+      const incandescentLight = incandescentFactory.createLight();
+      const metalButton = incandescentFactory.createButton();
+
+      incandescentLight.turnOn(); // 输出: Incandescent Light is on
+      metalButton.press(); // 输出: Metal Button is pressed
+    </script>
+  </body>
+</html>

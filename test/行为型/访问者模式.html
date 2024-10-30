@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>es6 语法学习 - 访问者模式</title>
+  </head>
+  <body>
+    <script>
+      //Visitor:定义了一个访问者的接口，其中包含针对不同元素类型的访问方法。
+      class Visitor {
+        visitElementA(elementA) {
+          throw new Error('This method must be overridden!');
+        }
+
+        visitElementB(elementB) {
+          throw new Error('This method must be overridden!');
+        }
+      }
+
+      //具体访问者ConcreteVisitor:实现了访客接口，为具体元素执行相关操作。
+      class ConcreteVisitor extends Visitor {
+        visitElementA(elementA) {
+          console.log(`Visiting Element A: ${elementA.getName()}`);
+        }
+
+        visitElementB(elementB) {
+          console.log(`Visiting Element B: ${elementB.getName()}`);
+        }
+      }
+
+      // Element元素接口:定义了访问的接口，包含 `accept` 方法，接受访问者。
+      class Element {
+        accept(visitor) {
+          throw new Error('This method must be overridden!');
+        }
+      }
+
+      //具体元素 A
+      class ElementA extends Element {
+        getName() {
+          return 'Element A';
+        }
+
+        accept(visitor) {
+          visitor.visitElementA(this); // 接受访问者
+        }
+      }
+
+      //具体元素 B
+      class ElementB extends Element {
+        getName() {
+          return 'Element B';
+        }
+
+        accept(visitor) {
+          visitor.visitElementB(this); // 接受访问者
+        }
+      }
+
+      //对象结构:维护一个元素列表，并能够对每个元素调用接受访问者的 `accept` 方法。
+      class ObjectStructure {
+        constructor() {
+          this.elements = []; // 存储元素
+        }
+
+        addElement(element) {
+          this.elements.push(element); // 添加元素
+        }
+
+        accept(visitor) {
+          this.elements.forEach((element) => element.accept(visitor)); // 遍历并接受访问者
+        }
+      }
+
+      // 示例使用
+      const objectStructure = new ObjectStructure(); // 对象结构
+      const elementA = new ElementA(); //具体元素 A
+      const elementB = new ElementB(); //具体元素 B
+
+      objectStructure.addElement(elementA);
+      objectStructure.addElement(elementB);
+
+      const visitor = new ConcreteVisitor(); //具体访问者
+      objectStructure.accept(visitor); //访问所有元素
+    </script>
+  </body>
+</html>

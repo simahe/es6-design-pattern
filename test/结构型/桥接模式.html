@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>es6 语法学习 - 桥接模式</title>
+  </head>
+  <body>
+    <script>
+      // 实现部分的接口
+      class Color {
+        applyColor() {
+          throw new Error('This method should be overridden.');
+        }
+      }
+
+      class Red extends Color {
+        applyColor() {
+          return 'Red';
+        }
+      }
+
+      class Green extends Color {
+        applyColor() {
+          return 'Green';
+        }
+      }
+
+      // 抽象部分的接口
+      class Shape {
+        constructor(color) {
+          this.color = color;
+        }
+
+        draw() {
+          throw new Error('This method should be overridden.');
+        }
+      }
+
+      class Circle extends Shape {
+        draw() {
+          return `Drawing a Circle in ${this.color.applyColor()}`;
+        }
+      }
+
+      class Square extends Shape {
+        draw() {
+          return `Drawing a Square in ${this.color.applyColor()}`;
+        }
+      }
+
+      // 客户端代码
+      const redCircle = new Circle(new Red());
+      console.log(redCircle.draw()); // 输出: Drawing a Circle in Red
+      const greenSquare = new Square(new Green());
+      console.log(greenSquare.draw()); // 输出: Drawing a Square in Green
+    </script>
+  </body>
+</html>

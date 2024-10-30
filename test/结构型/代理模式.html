@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>es6 语法学习 - 代理模式</title>
+  </head>
+  <body>
+    <script>
+      //真实对象，代表用户
+      class User {
+        constructor(name, age) {
+          this.name = name;
+          this.age = age;
+        }
+
+        getUserInfo() {
+          return `Name: ${this.name}, Age: ${this.age};`;
+        }
+
+        setUserInfo(name, age) {
+          this.name = name;
+          this.age = age;
+        }
+      }
+
+      //代理类
+      class UserProxy {
+        constructor(user) {
+          this.user = user;
+          this.accessLevel = 'admin'; //默认权限
+        }
+
+        getUserInfo() {
+          // 可以在这里添加访问控制逻辑
+          console.log('Fetching user info...');
+          return this.user.getUserInfo();
+        }
+
+        setUserInfo(name, age) {
+          // 假设只有 admin 用户可以修改信息
+          if (this.checkAccess()) {
+            this.user.setUserInfo(name, age);
+            console.log('User info updated.');
+          } else {
+            console.log(
+              'Access denied: You do not have permission to update user info.'
+            );
+          }
+        }
+
+        checkAccess() {
+          //这里可以添加实际的权限检查逻辑
+          return this.accessLevel === 'admin'; //只允许 admin访问
+        }
+      }
+
+      // 使用示例
+      const user = new User('Alice', 25);
+      const userProxy = new UserProxy(user);
+
+      // 获取用户信息
+      console.log(userProxy.getUserInfo()); // 输出: Fetching user info... Name: Alice, Age:25
+      // 尝试修改用户信息
+      userProxy.setUserInfo('Bob', 30); // 输出: User info updated.
+      console.log(userProxy.getUserInfo()); // 输出: Fetching user info... Name: Bob, Age:30
+      // 修改权限，尝试无权限的设置
+      userProxy.accessLevel = 'guest';
+      userProxy.setUserInfo('Charlie', 20); // 输出: Access denied: You do not have permission to update user info.
+    </script>
+  </body>
+</html>

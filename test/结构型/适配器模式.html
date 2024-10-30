@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>es6 语法学习 - 适配器模式</title>
+  </head>
+  <body>
+    <script>
+      // 目标接口
+      class Target {
+        request() {
+          throw new Error('This method should be overridden!');
+        }
+      }
+
+      // 适配者
+      class Adaptee {
+        specificRequest() {
+          return 'Voltage from Adaptee';
+        }
+      }
+
+      // 适配器
+      class Adapter extends Target {
+        constructor(adaptee) {
+          super();
+          this.adaptee = adaptee;
+        }
+
+        request() {
+          // 将适配者的特定请求转换为目标请求
+          const result = this.adaptee.specificRequest();
+          return `Adapted: ${result}`;
+        }
+      }
+
+      // 使用示例
+      const adaptee = new Adaptee(); // 适配者
+      const adapter = new Adapter(adaptee); // 适配器
+
+      // 客户端代码只依赖于目标接口
+      console.log(adapter.request()); // 输出: Adapted: Voltage from Adaptee
+    </script>
+  </body>
+</html>

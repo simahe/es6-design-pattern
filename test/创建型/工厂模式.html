@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>es6 语法学习 - 工厂模式</title>
+  </head>
+  <body>
+    <script>
+      // 定义圆形类
+      class Circle {
+        constructor(radius) {
+          this.radius = radius;
+        }
+
+        getArea() {
+          return Math.PI * this.radius * 2;
+        }
+      }
+
+      // 定义正方形类
+      class Square {
+        constructor(side) {
+          this.side = side;
+        }
+
+        getArea() {
+          return this.side * 4;
+        }
+      }
+
+      // 工厂函数
+      function createShape(type, ...args) {
+        switch (type) {
+          case 'circle':
+            return new Circle(...args);
+          case 'square':
+            return new Square(...args);
+          default:
+            throw new Error('Unknown shape type');
+        }
+      }
+      // 创建一个圆形对象
+      const circle = createShape('circle', 5);
+      console.log('Circle Area:', circle.getArea());
+
+      // 创建一个正方形对象
+      const square = createShape('square', 4);
+      console.log('Square Area:', square.getArea());
+    </script>
+  </body>
+</html>

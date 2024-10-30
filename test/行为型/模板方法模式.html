@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>es6 语法学习 - 模板方法模式</title>
+  </head>
+  <body>
+    <script>
+      // 抽象类
+      class Game {
+        constructor() {}
+
+        // 抽象方法
+        init() {
+          throw new Error('init method must be implemented');
+        }
+
+        start() {
+          throw new Error('start method must be implemented');
+        }
+
+        end() {
+          throw new Error('end method must be implemented');
+        }
+
+        // 模板方法
+        play() {
+          this.init();
+          this.start();
+          this.end();
+        }
+      }
+
+      // 具体子类1：Cricket游戏
+      class Cricket extends Game {
+        init() {
+          console.log('Cricket Game Initialized! Start playing');
+        }
+
+        start() {
+          console.log('Cricket Game Started. Enjoy the game!');
+        }
+
+        end() {
+          console.log('Cricket Game Finished!');
+        }
+      }
+
+      // 具体子类2：Football游戏
+      class Football extends Game {
+        init() {
+          console.log('Football Game Initialized! Start playing');
+        }
+
+        start() {
+          console.log('Football Game Started. Enjoy the game!');
+        }
+
+        end() {
+          console.log('Football Game Finished!');
+        }
+      }
+
+      // 使用模板方法
+      let game = new Cricket();
+      game.play();
+
+      game = new Football();
+      game.play();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>es6 语法学习 - 命令模式</title>
+  </head>
+  <body>
+    <script>
+      // 命令接口
+      class Command {
+        execute() {
+          throw new Error('Subclasses must implement execute()');
+        }
+
+        undo() {
+          // 可选：实现撤销操作
+          console.log('Undo operation not supported for this command.');
+        }
+      }
+
+      // 具体命令类：打开电灯命令
+      class OpenLightCommand extends Command {
+        constructor(light) {
+          super();
+          this.light = light;
+        }
+
+        execute() {
+          this.light.on();
+          console.log('Light is on.');
+        }
+
+        undo() {
+          this.light.off();
+          console.log('Light is off.');
+        }
+      }
+
+      // 电灯类
+      class Light {
+        on() {
+          console.log('Turning the light on.');
+        }
+
+        off() {
+          console.log('Turning the light off.');
+        }
+      }
+
+      // 调用者（遥控器）
+      class RemoteControl {
+        constructor() {
+          this.command = null;
+        }
+
+        setCommand(command) {
+          this.command = command;
+        }
+
+        pressButton() {
+          if (this.command) {
+            this.command.execute();
+          }
+        }
+
+        pressUndoButton() {
+          if (this.command && this.command.undo) {
+            this.command.undo();
+          }
+        }
+      }
+
+      // 客户端代码
+      const light = new Light();
+      const openLightCommand = new OpenLightCommand(light); // 具体命令类
+      const remote = new RemoteControl(); // 调用者
+
+      remote.setCommand(openLightCommand);
+      remote.pressButton(); // 输出: Turning the light on. Light is on.
+      remote.pressUndoButton(); // 输出: Turning the light off. Light is off.
+    </script>
+  </body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>es6 语法学习 - 中介者模式</title>
+  </head>
+  <body>
+    <script>
+      // 用户类
+      class User {
+        constructor(name, mediator) {
+          this.name = name;
+          this.mediator = mediator;
+        }
+
+        sendMessage(message) {
+          this.mediator.sendMessage(this, message);
+        }
+
+        receiveMessage(sender, message) {
+          console.log(`${sender.name} says to ${this.name}: ${message}`);
+        }
+      }
+
+      // 中介者（聊天室）类
+      class ChatRoom {
+        constructor() {
+          this.users = [];
+        }
+
+        registerUser(user) {
+          this.users.push(user);
+          user.mediator = this; // 确保用户知道它们的中介者
+        }
+
+        sendMessage(sender, message) {
+          this.users.forEach((user) => {
+            if (user !== sender) {
+              user.receiveMessage(sender, message);
+            }
+          });
+        }
+      }
+
+      // 使用中介者模式
+      const chatRoom = new ChatRoom();
+
+      const alice = new User('Alice', null); // 初始时，我们不直接传递中介者，而是在注册时设置
+      const bob = new User('Bob', null);
+      const charlie = new User('Charlie', null);
+
+      chatRoom.registerUser(alice);
+      chatRoom.registerUser(bob);
+      chatRoom.registerUser(charlie);
+
+      // 用户发送消息
+      alice.sendMessage('Hello everyone!');
+      bob.sendMessage('Hi Alice, how are you?');
+      charlie.sendMessage('What are we chatting about today?');
+    </script>
+  </body>
+</html>

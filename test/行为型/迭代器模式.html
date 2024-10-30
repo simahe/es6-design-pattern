@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>es6 语法学习 - 迭代器模式</title>
+  </head>
+  <body>
+    <script>
+      // 自定义集合类
+      class MyCollection {
+        constructor(items) {
+          this.items = items;
+        }
+
+        // 实现Symbol.iterator方法，返回一个迭代器对象
+        [Symbol.iterator]() {
+          let index = 0;
+          const items = this.items;
+          return {
+            // 迭代器对象的next方法
+            next: function () {
+              if (index < items.length) {
+                return { value: items[index++], done: false };
+              } else {
+                return { done: true };
+              }
+            },
+          };
+        }
+      }
+
+      // 使用自定义集合类
+      const myCollection = new MyCollection([1, 2, 3, 4, 5]);
+
+      // 使用for...of循环遍历集合
+      for (const item of myCollection) {
+        console.log(item); // 输出: 1, 2, 3, 4, 5
+      }
+
+      // 手动使用迭代器遍历集合
+      const iterator = myCollection[Symbol.iterator]();
+      let result = iterator.next();
+      console.log('手动使用迭代器遍历集合');
+      while (!result.done) {
+        console.log(result.value); // 输出: 1, 2, 3, 4, 5
+        result = iterator.next();
+      }
+    </script>
+  </body>
+</html>

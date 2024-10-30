@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>es6 语法学习 - 策略模式</title>
+  </head>
+  <body>
+    <script>
+      // 定义一个策略接口
+      class DiscountStrategy {
+        calculate(order) {
+          throw new Error('Subclasses must implement abstract method');
+        }
+      }
+
+      // 具体的策略类：无折扣策略
+      class NoDiscountStrategy extends DiscountStrategy {
+        calculate(order) {
+          return order.getTotalPrice();
+        }
+      }
+
+      // 具体的策略类：百分比折扣策略
+      class PercentageDiscountStrategy extends DiscountStrategy {
+        constructor(percentage) {
+          super();
+          this.percentage = percentage;
+        }
+
+        calculate(order) {
+          const discount = order.getTotalPrice() * (this.percentage / 100);
+          return order.getTotalPrice() - discount;
+        }
+      }
+
+      // 具体的策略类：固定金额折扣策略
+      class FixedAmountDiscountStrategy extends DiscountStrategy {
+        constructor(amount) {
+          super();
+          this.amount = amount;
+        }
+
+        calculate(order) {
+          return order.getTotalPrice() - this.amount;
+        }
+      }
+
+      // 订单类
+      class Order {
+        constructor(items) {
+          this.items = items; // 假设items是一个包含每个商品价格和数量的数组
+        }
+
+        getTotalPrice() {
+          // 计算订单的总价格（这里简单处理为所有商品价格之和）
+          return this.items.reduce(
+            (total, item) => total + item.price * item.quantity,
+            0
+          );
+        }
+
+        // 设置折扣策略
+        setDiscountStrategy(strategy) {
+          this.strategy = strategy;
+        }
+
+        // 计算最终价格
+        getFinalPrice() {
+          return this.strategy.calculate(this);
+        }
+      }
+
+      // 使用策略模式
+      const items = [
+        { price: 100, quantity: 2 },
+        { price: 50, quantity: 1 },
+      ];
+
+      const order = new Order(items);
+
+      // 使用无折扣策略
+      order.setDiscountStrategy(new NoDiscountStrategy());
+      console.log('No Discount Final Price:', order.getFinalPrice()); // 输出：250
+
+      // 使用百分比折扣策略（10%折扣）
+      order.setDiscountStrategy(new PercentageDiscountStrategy(10));
+      console.log('Percentage Discount Final Price:', order.getFinalPrice()); // 输出：225
+
+      // 使用固定金额折扣策略（50元折扣）
+      order.setDiscountStrategy(new FixedAmountDiscountStrategy(50));
+      console.log('Fixed Amount Discount Final Price:', order.getFinalPrice()); // 输出：200
+    </script>
+  </body>
+</html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>es6 语法学习 - 观察者模式</title>
+  </head>
+
+  <body>
+    <script>
+      // 观察者类
+      class Observer {
+        constructor(name) {
+          this.name = name;
+        }
+
+        update(message) {
+          console.log(`${this.name} received message: ${message}`);
+        }
+      }
+
+      // 主题类（可被观察的对象）
+      class Subject {
+        constructor() {
+          this.observers = [];
+        }
+
+        // 注册观察者
+        registerObserver(observer) {
+          this.observers.push(observer);
+        }
+
+        // 移除观察者
+        removeObserver(observer) {
+          const index = this.observers.indexOf(observer);
+          if (index > -1) {
+            this.observers.splice(index, 1);
+          }
+        }
+
+        // 通知所有观察者
+        notifyObservers(message) {
+          this.observers.forEach((observer) => observer.update(message));
+        }
+
+        // 模拟一些业务逻辑，这里可以是任何会改变状态的方法
+        someBusinessLogic() {
+          const message = 'The state has changed!';
+          console.log('Business logic executed, notifying observers...');
+          this.notifyObservers(message);
+        }
+      }
+
+      // 使用观察者模式
+      const subject = new Subject();
+
+      const observer1 = new Observer('Observer 1');
+      const observer2 = new Observer('Observer 2');
+      const observer3 = new Observer('Observer 3');
+
+      subject.registerObserver(observer1);
+      subject.registerObserver(observer2);
+      // 不注册 observer3，以测试 removeObserver 和未注册的观察者不会收到通知
+      subject.someBusinessLogic(); // Observer 1 和 Observer 2 会收到通知
+      subject.registerObserver(observer3); // 现在注册 observer3
+      subject.someBusinessLogic(); // Observer 1, Observer 2, 和 Observer 3 都会收到通知
+      subject.removeObserver(observer2); // 移除 observer2
+      subject.someBusinessLogic(); // Observer 1 和 Observer 3 会收到通知，但 Observer 2 不会
+    </script>
+  </body>
+</html>

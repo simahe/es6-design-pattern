@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>es6 语法学习 - 状态模式</title>
+  </head>
+  <body>
+    <script>
+      // 定义订单状态（使用Symbol模拟枚举）
+      const OrderState = {
+        CREATED: Symbol('CREATED'),
+        APPROVED: Symbol('APPROVED'),
+        REJECTED: Symbol('REJECTED'),
+        SHIPPED: Symbol('SHIPPED'),
+        DELIVERED: Symbol('DELIVERED'),
+      };
+
+      // 订单状态类（抽象状态类）
+      class OrderStateHandler {
+        handle(order) {
+          throw new Error('Subclass must implement abstract method');
+        }
+      }
+
+      // 具体状态类
+      class CreatedState extends OrderStateHandler {
+        handle(order) {
+          if (order.approve()) {
+            order.setState(OrderState.APPROVED);
+            console.log('Order approved and moved to APPROVED state.');
+          } else if (order.reject()) {
+            order.setState(OrderState.REJECTED);
+            console.log('Order rejected and moved to REJECTED state.');
+          }
+        }
+      }
+
+      class ApprovedState extends OrderStateHandler {
+        handle(order) {
+          if (order.ship()) {
+            order.setState(OrderState.SHIPPED);
+            console.log('Order shipped and moved to SHIPPED state.');
+          }
+        }
+      }
+
+      class RejectedState extends OrderStateHandler {
+        handle(order) {
+          // 拒绝后的订单不能进行其他操作
+          console.log(
+            'Order is in REJECTED state and cannot be processed further.'
+          );
+        }
+      }
+
+      class ShippedState extends OrderStateHandler {
+        handle(order) {
+          if (order.deliver()) {
+            order.setState(OrderState.DELIVERED);
+            console.log('Order delivered and moved to DELIVERED state.');
+          }
+        }
+      }
+
+      class DeliveredState extends OrderStateHandler {
+        handle(order) {
+          // 已交付的订单不能进行其他操作
+          console.log(
+            'Order is in DELIVERED state and the process is complete.'
+          );
+        }
+      }
+
+      // 订单类（上下文类）
+      class Order {
+        constructor(state = OrderState.CREATED) {
+          this.state = state;
+          this.stateHandler = this.getStateHandler();
+        }
+
+        // 获取当前状态的处理程序
+        getStateHandler() {
+          switch (this.state) {
+            case OrderState.CREATED:
+              return new CreatedState();
+            case OrderState.APPROVED:
+              return new ApprovedState();
+            case OrderState.REJECTED:
+              return new RejectedState();
+            case OrderState.SHIPPED:
+              return new ShippedState();
+            case OrderState.DELIVERED:
+              return new DeliveredState();
+            default:
+              throw new Error('Unknown order state');
+          }
+        }
+
+        // 设置状态（并更新状态处理程序）
+        setState(state) {
+          this.state = state;
+          this.stateHandler = this.getStateHandler();
+        }
+
+        // 模拟业务方法
+        approve() {
+          // 这里可以添加批准订单的逻辑
+          return true; // 假设批准成功
+        }
+
+        reject() {
+          // 这里可以添加拒绝订单的逻辑
+          return true; // 假设拒绝成功
+        }
+
+        ship() {
+          // 这里可以添加发货订单的逻辑
+          return true; // 假设发货成功
+        }
+
+        deliver() {
+          // 这里可以添加交付订单的逻辑
+          return true; // 假设交付成功
+        }
+
+        // 处理订单（根据当前状态调用相应的处理程序）
+        process() {
+          this.stateHandler.handle(this);
+        }
+      }
+
+      // 使用状态模式
+      const order = new Order();
+      order.process(); // Order approved and moved to APPROVED state. （假设批准成功）
+      order.process(); // Order shipped and moved to SHIPPED state. （假设发货成功）
+      order.process(); // Order delivered and moved to DELIVERED state. （假设交付成功）
+      order.process(); // Order is in DELIVERED state and the process is complete.
+    </script>
+  </body>
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>es6 语法学习 - 单例模式</title>
+  </head>
+  <body>
+    <script>
+      class Singleton {
+        constructor() {
+          if (Singleton.instance) {
+            throw new Error(
+              'Use Singleton.getInstance() to get the single instance of this class.'
+            );
+          }
+          Singleton.instance = this;
+          // 初始化代码...
+          this.someProperty = 'some value';
+        }
+
+        static getInstance() {
+          if (!Singleton.instance) {
+            Singleton.instance = new Singleton();
+          }
+          return Singleton.instance;
+        }
+
+        someMethod() {
+          console.log('Singleton method called');
+          console.log(this.someProperty);
+        }
+      }
+
+      // 使用单例
+      const singleton1 = Singleton.getInstance();
+      singleton1.someMethod(); // 输出: Singleton method called 和 some value
+
+      const singleton2 = Singleton.getInstance();
+      console.log(singleton1 === singleton2); // 输出: true，证明是单例
+
+      // 尝试直接实例化会抛出错误
+      const singleton3 = new Singleton(); //ncaught Error: Use Singleton.getInstance() to get the single instance of this class.
+    </script>
+  </body>
+</html>

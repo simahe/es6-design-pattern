@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>es6 语法学习 - 组合模式</title>
+  </head>
+  <body>
+    <script>
+      // 组件类
+      class Graphic {
+        draw() {
+          throw new Error('此方法需要被实现');
+        }
+      }
+      // 叶子类 - 圆形
+      class Circle extends Graphic {
+        draw() {
+          console.log('绘制一个圆形');
+        }
+      }
+
+      // 叶子类 - 矩形
+      class Rectangle extends Graphic {
+        draw() {
+          console.log('绘制一个矩形');
+        }
+      }
+      // 组合类
+      class CompositeGraphic extends Graphic {
+        constructor() {
+          super();
+          this.graphics = []; // 用于存储子图形
+        }
+
+        add(graphic) {
+          this.graphics.push(graphic);
+        }
+
+        remove(graphic) {
+          const index = this.graphics.indexOf(graphic);
+          if (index !== -1) {
+            this.graphics.splice(index, 1);
+          }
+        }
+
+        draw() {
+          console.log('绘制组合图形:');
+          for (const graphic of this.graphics) {
+            graphic.draw(); // 递归调用
+          }
+        }
+      }
+
+      // 客户端代码
+      const circle1 = new Circle(); //圆形1
+      const circle2 = new Circle(); //圆形2
+      const rectangle1 = new Rectangle(); //矩形1
+      const rectangle2 = new Rectangle(); //矩形2
+
+      const compositeGraphic = new CompositeGraphic(); // 组合
+      compositeGraphic.add(circle1);
+      compositeGraphic.add(circle2);
+      compositeGraphic.add(rectangle1);
+      compositeGraphic.add(rectangle2);
+
+      // 绘制组合图形
+      compositeGraphic.draw();
+    </script>
+  </body>
+</html>

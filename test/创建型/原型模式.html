@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>es6 语法学习 - 原型模式</title>
+  </head>
+  <body>
+    <script>
+      // 定义一个基类（父类）
+      class Animal6 {
+        constructor(name) {
+          this.name = name;
+        }
+
+        speak() {
+          console.log(`${this.name} makes a sound.`);
+        }
+      }
+
+      // 定义一个子类，继承自Animal
+      class Dog6 extends Animal6 {
+        constructor(name, breed) {
+          super(name); // 调用父类的构造函数
+          this.breed = breed;
+        }
+
+        speak() {
+          // 重写父类的方法
+          console.log(`${this.name} the ${this.breed} dog6 barks.`);
+        }
+      }
+
+      // 创建Dog的实例
+      const d6 = new Dog6('Rex', 'German Shepherd');
+      d6.speak(); // 输出: Rex the German Shepherd dog barks.
+
+      //   在纯原型模式中，我们不使用`class`关键字，而是直接操作对象的原型来创建新的对象类型。以下是一个简单的例子：
+      // 创建一个Animal对象作为原型
+      let Animal = {
+        type: 'Animal',
+        speak(name) {
+          console.log(`${name} makes a sound.`);
+        },
+      };
+
+      // 创建一个Dog对象，其原型设置为animal
+      const dog = Object.create(Animal);
+      dog.type = 'Dog';
+      dog.breed = 'German Shepherd';
+
+      // 重写Dog对象的speak方法
+      dog.speak = function (name, breed) {
+        console.log(`${name} the ${breed} dog barks.`);
+      };
+
+      // 调用speak方法时，需要手动传递name和breed参数
+      dog.speak('Rex', dog.breed); // 输出: Rex the German Shepherd dog barks.
+    </script>
+  </body>
+</html>
